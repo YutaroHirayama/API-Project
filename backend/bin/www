@@ -20,5 +20,5 @@ db.sequelize
   })
   .catch((err) => {
     // console.log('Database connection failure.');
-    console.error(err);
+    // console.error(err);
   });
