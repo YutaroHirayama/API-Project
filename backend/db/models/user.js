@@ -22,6 +22,22 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [1,50],
+          isAlpha: true
+        }
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [1,50],
+          isAlpha: true
+        }
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,

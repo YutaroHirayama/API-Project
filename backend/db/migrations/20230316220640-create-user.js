@@ -19,6 +19,15 @@ module.exports = {
         allowNull: false,
         unique: true
       },
+      //adding first name and last name
+      firstName: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
       email: {
         type: Sequelize.STRING(256),
         allowNull: false,
