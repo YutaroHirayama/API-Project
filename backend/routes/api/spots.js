@@ -4,16 +4,26 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Spot, Review, ReviewImage } = require('../../db/models');
+
 
 const router = express.Router();
 
 
 // Get all spots
-router.get('/', requireAuth, async (req, res, next) => {
-  res.send('success');
-  }
-)
+router.get('/', async (req, res, next) => {
+  const spots = {};
+  const getSpots = await Spot.findAll({
+    include: {
+      model: Review
+    }
+  });
+
+  // for(let i = 0; i < getSpots.length; i++) {
+  //   let star =
+  // }
+  res.json(getSpots);
+});
 
 // // validate signup
 // const validateSignup = [
