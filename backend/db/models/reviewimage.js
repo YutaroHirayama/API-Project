@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, Validator
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ReviewImage extends Model {
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ReviewImage.belongsTo(models.Review, {foreignKey: 'reviewId', onDelete: 'CASCADE', hooks: true})
+      ReviewImage.belongsTo(models.Review, {foreignKey: 'reviewId'});
     }
   }
   ReviewImage.init({
@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'ReviewImage',
+    defaultScope: {
+      attributes: {
+        exclude: ["createdAt", "updatedAt"]
+      }
+    }
   });
   return ReviewImage;
 };
