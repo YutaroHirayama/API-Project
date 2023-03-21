@@ -22,7 +22,7 @@ module.exports = {
         stars: 4
       },
       {
-        spotId: 3,
+        spotId: 1,
         userId: 2,
         review: 'Beautiful apartment with great view! I would stay here again when visiting Chicago.',
         stars: 5
