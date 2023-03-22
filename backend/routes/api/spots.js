@@ -56,6 +56,9 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
     ]
   }); // Returns array of all spots
 
+  if(!spots.length) {
+    return res.send('You do not own any spots (yet).')
+  }
   let spotsList = [];
   spots.forEach(spot => spotsList.push(spot.toJSON())); // converting Objects to JSON Object
 
@@ -85,64 +88,82 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
   res.json({Spots:spotsList});
 });
 
-    // Get details of a Spot from an id
-    spotsRouter.get('/:spotId', async (req, res, next) => {
-      console.log(req.params)
-      const spot = await Spot.findOne({
-        where: {id: req.params.spotId},
-        include: [
-          {model: Review},
-          {model: SpotImage, attributes: ['id', 'url', 'preview']},
-          {model: User, as: 'Owner', attributes: ['id', 'firstName', 'lastName']}]
-      });
+// Get details of a Spot from an id
+spotsRouter.get('/:spotId', async (req, res, next) => {
 
-      if(!spot) {
-        const err = new Error(`Couldn't find a Spot with the specified id.`)
-        err.status = 404;
-        err.statusCode = '404'
-        return next(err);
-      }
+  const spot = await Spot.findOne({
+    where: {id: req.params.spotId},
+    include: [
+      {model: Review},
+      {model: SpotImage, attributes: ['id', 'url', 'preview']},
+      {model: User, as: 'Owner', attributes: ['id', 'firstName', 'lastName']}]
+  });
 
-      spotRes = spot.toJSON();
+  if(!spot) {
+    const err = new Error("Spot couldn't be found")
+    err.status = 404;
+    err.statusCode = '404'
+    return next(err);
+  }
 
-      spotRes.numReviews = spotRes.Reviews.length; // Total number of reviews per spot
-      let totalStars = 0;
-      spotRes.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
-      spotRes.avgStarRating = totalStars / spotRes.Reviews.length; // sets avgRating key in spot object equal to average star rating
+  spotRes = spot.toJSON();
 
-      spotRes.SpotImages = spot.SpotImages;
+  spotRes.numReviews = spotRes.Reviews.length; // Total number of reviews per spot
+  let totalStars = 0;
+  spotRes.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
+  spotRes.avgStarRating = totalStars / spotRes.Reviews.length; // sets avgRating key in spot object equal to average star rating
+  if(!spotRes.avgStarRating) spotRes.avgStarRating = 'No reviews (yet)'; // if no reviews
 
-      delete spotRes.Reviews;
+  if(!spotRes.SpotImages.length) spotRes.SpotImages = 'No images available (yet).'; //if no preview SpotImages available
 
-      res.json(spotRes);
-    });
+  delete spotRes.Reviews;
 
-    // Create a Spot
-    spotsRouter.post('/', requireAuth, async (req, res, next) => {
-      const { ownerId, address, city, state, country, lat, lng, name, description, price } = req.body;
+  res.json(spotRes);
+});
 
+// Create a Spot
+spotsRouter.post('/', requireAuth, async (req, res, next) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+  try {
       const newSpot = await Spot.create({
-        ownerId,
+        ownerId: req.user.id,
         address,
         city,
         state,
         country,
-    lat,
-    lng,
-    name,
-    description,
-    price
-  });
+        lat,
+        lng,
+        name,
+        description,
+        price
+      });
+    res.status(201);
+    return res.json(newSpot);
 
-  res.json(newSpot);
-})
+  } catch (err) {
+    err.status = 400;
+    err.message = 'Validation Error'
+    err.errors = [
+      "Street address is required",
+      "City is required",
+      "State is required",
+      "Country is required",
+      "Latitude is not valid",
+      "Longitude is not valid",
+      "Name must be less than 50 characters",
+      "Description is required",
+      "Price per day is required"
+    ];
+    return next(err);
+  }
+});
 
 
 //spots error handler
 
 spotsRouter.use((err, _req, res, _next) => {
   res.status(err.status || 500);
-  console.log(err);
   res.json({
     message: err.message,
     statusCode: err.status,
