@@ -6,7 +6,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
-const router = express.Router();
+const usersRouter = express.Router();
 
 
 // validate signup
@@ -32,7 +32,7 @@ const validateSignup = [
 
 
 // Sign up
-router.post(
+usersRouter.post(
   '',
   validateSignup,
   async (req, res) => {
@@ -56,7 +56,39 @@ router.post(
   }
 );
 
+usersRouter.get('/:username/spots', requireAuth, async (req, res, next) => {
+  const allSpots = await Spot.findAll({
+    where: {username: req.query.username},
+    include: [{model: Review}, {model: SpotImage}]}); // Returns array of all spots
+
+  let spotsList = [];
+  allSpots.forEach(spot => spotsList.push(spot.toJSON())); // converting Objects to JSON Object
+
+  // Manipulating spots objects in allSpots array
+  spotsList.forEach(spot => {
+
+    // adding avgRating to each spot Object
+    const reviewCount = spot.Reviews.length; // Total number of reviews per spot
+    let totalStars = 0;
+    spot.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
+    spot.avgRating = totalStars / reviewCount; // sets avgRating key in spot object equal to average star rating
+
+    if(!spot.avgRating) spot.avgRating = 'No reviews (yet)'; // if no reviews
+
+    // adding previewImage url
+    spot.SpotImages.forEach(image => {
+      if(image.preview) spot.previewImage = image.url; // sets previewImage to url of SpotImage
+    })
+
+    if(!spot.previewImage) spot.previewImage = 'No preview available.'; //if no preview SpotImages available
+
+    // Remove Review and SpotImages attributes on response
+    delete spot.Reviews;
+    delete spot.SpotImages;
+  })
+
+  res.json({Spots:spotsList});
+})
 
 
-
-module.exports = router;
+module.exports = usersRouter;
