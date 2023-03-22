@@ -5,6 +5,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage } = require('../../db/models');
+const user = require('../../db/models/user');
 
 
 const spotsRouter = express.Router();
@@ -88,6 +89,35 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
   res.json({Spots:spotsList});
 });
 
+//Add an Image to a Spot based on the Spot's id//
+spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const spotId = req.params.spotId;
+  const { url, preview } = req.body;
+
+  const spot = await Spot.findByPk(spotId);
+
+  if(!spot || spot.ownerId !== userId) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    })
+  }
+
+  const spotImage = await SpotImage.create({
+    spotId,
+    url,
+    preview
+  });
+
+  const newImage = spotImage.toJSON();
+  delete newImage.spotId;
+  delete newImage.updatedAt;
+  delete newImage.createdAt;
+
+  res.json(newImage);
+})
+
 // Get details of a Spot from an id
 spotsRouter.get('/:spotId', async (req, res, next) => {
 
@@ -120,6 +150,7 @@ spotsRouter.get('/:spotId', async (req, res, next) => {
 
   res.json(spotRes);
 });
+
 
 // Create a Spot
 spotsRouter.post('/', requireAuth, async (req, res, next) => {
@@ -160,8 +191,10 @@ spotsRouter.post('/', requireAuth, async (req, res, next) => {
 });
 
 
-//spots error handler
 
+
+
+//spotsRouter Error Handler
 spotsRouter.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   res.json({
