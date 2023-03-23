@@ -142,7 +142,7 @@ spotsRouter.get('/:spotId', async (req, res, next) => {
     res.json(err);
   }
 
-  spotRes = spot.toJSON();
+  const spotRes = spot.toJSON();
 
   spotRes.numReviews = spotRes.Reviews.length; // Total number of reviews per spot
   let totalStars = 0;
@@ -215,25 +215,25 @@ spotsRouter.put('/:spotId', requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  try {
-    handleValidationErrors(req);
+  // try {
+  //   handleValidationErrors(req);
 
-  } catch (err) {
-    err.status = 400;
-    err.message = 'Validation Error'
-    err.errors = [
-      "Street address is required",
-      "City is required",
-      "State is required",
-      "Country is required",
-      "Latitude is not valid",
-      "Longitude is not valid",
-      "Name must be less than 50 characters",
-      "Description is required",
-      "Price per day is required"
-    ];
-    return next(err);
-  };
+  // } catch (err) {
+  //   err.status = 400;
+  //   err.message = 'Validation Error'
+  //   err.errors = [
+  //     "Street address is required",
+  //     "City is required",
+  //     "State is required",
+  //     "Country is required",
+  //     "Latitude is not valid",
+  //     "Longitude is not valid",
+  //     "Name must be less than 50 characters",
+  //     "Description is required",
+  //     "Price per day is required"
+  //   ];
+  //   return next(err);
+  // };
 
   if(address) spot.address = address;
   if(city) spot.city = city;
@@ -244,12 +244,35 @@ spotsRouter.put('/:spotId', requireAuth, async (req, res, next) => {
   if(name) spot.name = name;
   if(description) spot.description = description;
   if(price) spot.price = price;
+  // spot.updatedAt = ;
 
   return res.json(spot);
 
 })
 
+// Delete a Spot
+spotsRouter.delete('/:spotId', requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const spot = await Spot.findByPk(req.params.spotId);
 
+  if(!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    });
+  }
+  if(spot.ownerId !== userId) {
+    const err = new Error("Forbidden")
+    err.status = 403;
+    return next(err);
+  }
+
+  await spot.destroy();
+  res.json({
+    message: "Successfully deleted",
+    statusCode: 200
+  });
+})
 
 //spotsRouter Error Handler
 spotsRouter.use((err, _req, res, _next) => {
