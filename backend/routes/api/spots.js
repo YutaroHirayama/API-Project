@@ -97,11 +97,17 @@ spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
 
   const spot = await Spot.findByPk(spotId);
 
-  if(!spot || spot.ownerId !== userId) {
+  if(!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",
       statusCode: 404
-    })
+    });
+  }
+
+  if(spot.ownerId !== userId) {
+    const err = new Error("Forbidden")
+    err.status = 403;
+    return next(err);
   }
 
   const spotImage = await SpotImage.create({
@@ -133,7 +139,7 @@ spotsRouter.get('/:spotId', async (req, res, next) => {
     const err = new Error("Spot couldn't be found")
     err.status = 404;
     err.statusCode = '404'
-    return next(err);
+    res.json(err);
   }
 
   spotRes = spot.toJSON();
@@ -190,7 +196,58 @@ spotsRouter.post('/', requireAuth, async (req, res, next) => {
   }
 });
 
+// Edit a Spot
+spotsRouter.put('/:spotId', requireAuth, async (req, res, next) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const userId = req.user.id;
 
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if(!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    });
+  }
+  if(spot.ownerId !== userId) {
+    const err = new Error("Forbidden")
+    err.status = 403;
+    return next(err);
+  }
+
+  try {
+    handleValidationErrors(req);
+
+  } catch (err) {
+    err.status = 400;
+    err.message = 'Validation Error'
+    err.errors = [
+      "Street address is required",
+      "City is required",
+      "State is required",
+      "Country is required",
+      "Latitude is not valid",
+      "Longitude is not valid",
+      "Name must be less than 50 characters",
+      "Description is required",
+      "Price per day is required"
+    ];
+    return next(err);
+  };
+
+  if(address) spot.address = address;
+  if(city) spot.city = city;
+  if(state) spot.state = state;
+  if(country) spot.country = country;
+  if(lat) spot.lat = lat;
+  if(lng) spot.lng = lng;
+  if(name) spot.name = name;
+  if(description) spot.description = description;
+  if(price) spot.price = price;
+
+  return res.json(spot);
+
+})
 
 
 
