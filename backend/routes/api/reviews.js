@@ -44,10 +44,12 @@ reviewsRouter.get('/current', requireAuth, async (req, res, next) => {
   let reviewsList = [];
   reviews.forEach(review => reviewsList.push(review.toJSON()));
 
-  reviewsRes.previewImage = reviews.SpotImages.url
-  delete reviewsRes.SpotImages;
+  reviewsList.forEach(review => {
+    review.Spot.previewImage = review.Spot.SpotImages[0].url
+    delete review.Spot.SpotImages;
+  })
 
-  res.json(reviewsRes)
+  res.json({Reviews: reviewsList})
 })
 
 module.exports = reviewsRouter;

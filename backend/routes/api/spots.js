@@ -4,14 +4,15 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { User, Spot, Review, SpotImage } = require('../../db/models');
+const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models');
 const user = require('../../db/models/user');
+const reviewimage = require('../../db/models/reviewimage');
 
 
 const spotsRouter = express.Router();
 
 
-// Get all spots
+/* GET ALL SPOTS */
 spotsRouter.get('/', async (req, res, next) => {
 
   const allSpots = await Spot.findAll({include: [{model: Review}, {model: SpotImage}]}); // Returns array of all spots
@@ -46,7 +47,7 @@ spotsRouter.get('/', async (req, res, next) => {
 });
 
 
-// Get all spots owned by Current User
+/*GET ALL SPOTS OWNED BY CURRENT USER */
 spotsRouter.get('/current', requireAuth, async (req, res, next) => {
 
   const spots = await Spot.findAll({
@@ -55,33 +56,29 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
       {model: Review},
       {model: SpotImage}
     ]
-  }); // Returns array of all spots
+  });
 
   if(!spots.length) {
     return res.send('You do not own any spots (yet).')
   }
   let spotsList = [];
-  spots.forEach(spot => spotsList.push(spot.toJSON())); // converting Objects to JSON Object
+  spots.forEach(spot => spotsList.push(spot.toJSON()));
 
-  // Manipulating spots objects in allSpots array
   spotsList.forEach(spot => {
 
-    // adding avgRating to each spot Object
-    const reviewCount = spot.Reviews.length; // Total number of reviews per spot
+    const reviewCount = spot.Reviews.length;
     let totalStars = 0;
-    spot.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
-    spot.avgRating = totalStars / reviewCount; // sets avgRating key in spot object equal to average star rating
+    spot.Reviews.forEach(review => totalStars += review.stars);
+    spot.avgRating = totalStars / reviewCount;
 
-    if(!spot.avgRating) spot.avgRating = 'No reviews (yet)'; // if no reviews
+    if(!spot.avgRating) spot.avgRating = 'No reviews (yet)';
 
-    // adding previewImage url
     spot.SpotImages.forEach(image => {
-      if(image.preview) spot.previewImage = image.url; // sets previewImage to url of SpotImage
+      if(image.preview) spot.previewImage = image.url;
     })
 
-    if(!spot.previewImage) spot.previewImage = 'No preview available.'; //if no preview SpotImages available
+    if(!spot.previewImage) spot.previewImage = 'No preview available.';
 
-    // Remove Review and SpotImages attributes on response
     delete spot.Reviews;
     delete spot.SpotImages;
   })
@@ -89,7 +86,7 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
   res.json({Spots:spotsList});
 });
 
-//Add an Image to a Spot based on the Spot's id//
+/* ADD AN IMAGE TO A SPOT BASED ON THE SPOT'S ID*/
 spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const spotId = req.params.spotId;
@@ -124,7 +121,30 @@ spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
   res.json(newImage);
 })
 
-// Get details of a Spot from an id
+/* GET ALL REVIEWS BY A SPOT'S ID*/
+
+spotsRouter.get('/:spotId/reviews', async (req, res, next) => {
+  const reviews = await Review.findAll({
+    where: {spotId: req.params.spotId},
+    include: [
+      {model: User, attributes: ['id', 'firstName', 'lastName']},
+      {model: ReviewImage, attributes: ['id','url']}
+    ],
+  });
+
+  if(!reviews.length) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    });
+  }
+
+  res.json({Reviews: reviews})
+})
+
+/* CREATE A REVIEW FOR A SPOT */
+
+/* GET DETAILS OF A SPOT FROM AN ID */
 spotsRouter.get('/:spotId', async (req, res, next) => {
 
   const spot = await Spot.findOne({
@@ -158,7 +178,7 @@ spotsRouter.get('/:spotId', async (req, res, next) => {
 });
 
 
-// Create a Spot
+/* CREATE A SPOT */
 spotsRouter.post('/', requireAuth, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
@@ -196,7 +216,7 @@ spotsRouter.post('/', requireAuth, async (req, res, next) => {
   }
 });
 
-// Edit a Spot
+/* EDIT A SPOT */
 spotsRouter.put('/:spotId', requireAuth, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
   const userId = req.user.id;
@@ -250,7 +270,7 @@ spotsRouter.put('/:spotId', requireAuth, async (req, res, next) => {
 
 })
 
-// Delete a Spot
+/* DELETE A SPOT */
 spotsRouter.delete('/:spotId', requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const spot = await Spot.findByPk(req.params.spotId);
@@ -274,7 +294,7 @@ spotsRouter.delete('/:spotId', requireAuth, async (req, res, next) => {
   });
 })
 
-//spotsRouter Error Handler
+/* SPOTS ERROR HANDLER */
 spotsRouter.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   res.json({

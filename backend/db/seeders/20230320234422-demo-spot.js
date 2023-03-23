@@ -42,7 +42,7 @@ module.exports = {
       lat: 41.89031,
       lng: -87.64774,
       name: 'Cloud9',
-      description: 'Welcome to The Soul! To ensure safety, all guests must pass our screening process and provide proper ID. A $1,000 security deposit is required for your booking, accepted on Major Credit Cards only, per our House Rules. Breathtaking skyline views, upscale kitchen finishes, and designer touches , just a mile away from the lively West Loop neighborhood. Explore the gourmet-style dining, bars, and cafes, or visit Randolph Street Market to get some vintage artwork.',
+      description: 'Breathtaking skyline views, upscale kitchen finishes, and designer touches , just a mile away from the lively West Loop neighborhood. Explore the gourmet-style dining, bars, and cafes, or visit Randolph Street Market to get some vintage artwork.',
       price: 655.00
     }
     ], {});
