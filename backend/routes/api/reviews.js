@@ -9,7 +9,7 @@ const user = require('../../db/models/user');
 
 const reviewsRouter = express.Router();
 
-// Get all Reviews of the current user
+/* GET ALL REVIEWS OF THE CURRENT USER */
 reviewsRouter.get('/current', requireAuth, async (req, res, next) => {
 
   const reviews = await Review.findAll({
@@ -52,7 +52,7 @@ reviewsRouter.get('/current', requireAuth, async (req, res, next) => {
   res.json({Reviews: reviewsList})
 });
 
-/* Add an Image to a Review based on the Review's id */
+/* ADD AN IMAGE TO A REVIEW BASED ON THE REVIEW'S ID */
 
 reviewsRouter.post('/:reviewId/images', requireAuth, async (req, res, next) => {
   const reviewId = parseInt(req.params.reviewId);
@@ -93,7 +93,39 @@ reviewsRouter.post('/:reviewId/images', requireAuth, async (req, res, next) => {
   delete resImage.createdAt;
 
   res.json(resImage);
-})
+});
+
+
+
+/* DELETE AN EXISTING REVIEW */
+
+reviewsRouter.delete('/:reviewId', requireAuth, async (req, res, next) => {
+  const reviewId = parseInt(req.params.reviewId);
+  const userId = req.user.id;
+
+  const review = await Review.findByPk(reviewId);
+
+  if(!review) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+      statusCode: 404
+    });
+  };
+
+  if(review.userId !== userId) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  };
+
+  await review.destroy();
+  res.json({
+    message: "Successfully deleted",
+    statusCode: 200
+  });
+});
+
+
 
 
 
