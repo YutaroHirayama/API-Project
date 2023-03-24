@@ -50,6 +50,61 @@ reviewsRouter.get('/current', requireAuth, async (req, res, next) => {
   })
 
   res.json({Reviews: reviewsList})
+});
+
+/* Add an Image to a Review based on the Review's id */
+
+reviewsRouter.post('/:reviewId/images', requireAuth, async (req, res, next) => {
+  const reviewId = parseInt(req.params.reviewId);
+  const userId = req.user.id;
+  const url = req.body.url;
+
+  const review = await Review.findOne({
+    where: {id: reviewId},
+    include: {
+      model: ReviewImage
+    }
+  });
+
+  if(!review) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+      statusCode: 404
+    });
+  };
+
+  if(review.userId !== userId) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  };
+
+  if(review.ReviewImages.length >= 10) {
+    const err = new Error('Maximum number of images for this resource was reached.');
+    err.status = 403;
+    return next(err);
+  }
+
+  const image = await review.createReviewImage({url});
+
+  const resImage = image.toJSON();
+  delete resImage.reviewId;
+  delete resImage.updatedAt;
+  delete resImage.createdAt;
+
+  res.json(resImage);
 })
+
+
+
+/* SPOTS ERROR HANDLER */
+reviewsRouter.use((err, _req, res, _next) => {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    statusCode: err.status,
+    errors: err.errors
+  });
+});
 
 module.exports = reviewsRouter;
