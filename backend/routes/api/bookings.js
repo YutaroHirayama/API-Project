@@ -25,14 +25,78 @@ bookingsRouter.get('/current', requireAuth, async (req, res, next) => {
       include: {
         model: SpotImage,
         attributes: ['url'],
-        where: {preview: true}
+        where: {preview: true},
+        required: false
       }
     }
   });
 
-  res.json({Bookings:bookings});
+  let bookingsList = [];
+  bookings.forEach(booking => bookingsList.push(booking.toJSON()));
+
+  bookingsList.forEach(booking => {
+
+    if(booking.Spot.SpotImages.length) {
+      booking.Spot.previewImage = booking.Spot.SpotImages[0].url;
+    } else {
+      booking.Spot.previewImage = 'This spot does not have Images (yet).'
+    }
+
+    delete booking.Spot.SpotImages;
+  });
+
+  res.json({Bookings:bookingsList});
 })
 
+/* DELETE A BOOKING */
 
+bookingsRouter.delete('/:bookingId', requireAuth, async (req, res, next) => {
+  const bookingId = parseInt(req.params.bookingId);
+  const userId = req.user.id;
+
+  const booking = await Booking.findOne({
+    where: {id: bookingId},
+    include: {model: Spot}
+  });
+
+  if(!booking) {
+    const err = new Error("Booking couldn't be found")
+    err.status = 404;
+    return next(err);
+  };
+
+  if((booking.userId !== userId) && (booking.Spot.ownerId !== userId)) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  };
+
+
+  const currentDate = new Date().toUTCString();
+  const current = new Date(currentDate).getTime();
+  const bookingTime = booking.startDate.getTime();
+
+  if(current > bookingTime) {
+    const err = new Error("Bookings that have been started can't be deleted")
+    err.status = 403;
+    return next(err);
+  }
+
+  await booking.destroy();
+  res.json({
+    message: "Successfully deleted",
+    statusCode: 200
+  });
+});
+
+/* BOOKING ERROR HANDLER */
+bookingsRouter.use((err, _req, res, _next) => {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    statusCode: err.status,
+    errors: err.errors
+  });
+});
 
 module.exports = bookingsRouter;
