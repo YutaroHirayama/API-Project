@@ -22,10 +22,9 @@ spotImagesRouter.delete('/:imageId', requireAuth, async (req, res, next) => {
   });
 
   if(!image) {
-    return res.status(404).json({
-      message: "Spot Image couldn't be found",
-      statusCode: 404
-    });
+    const err = new Error("Spot Image couldn't be found")
+    err.status = 404;
+    return next(err);
   };
 
   if(image.Spot.ownerId !== userId) {
