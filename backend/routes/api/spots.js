@@ -89,12 +89,21 @@ const validateQuery = [
 spotsRouter.get('/', validateQuery, async (req, res, next) => {
   let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
 
+
   page = parseInt(page);
   size = parseInt(size);
   if(Number.isNaN(page)) page = 0;
   if(Number.isNaN(size)) size = 20;
   if(page > 10) page = 10;
   if(size > 20) size = 20;
+
+  const offset = size * (page - 1)
+
+  let pagination = {};
+  if( page >= 1 && size >= 1) {
+    pagination.limit = size;
+    pagination.offset = offset;
+}
 
   const whereClause = {};
   if(minLat) whereClause.lat = {[Op.gte]: parseFloat(minLat)};
@@ -110,8 +119,7 @@ spotsRouter.get('/', validateQuery, async (req, res, next) => {
       {model: SpotImage}
     ],
     where: whereClause,
-    limit: size,
-    offset: size * (page - 1)
+    ...pagination
   }); // Returns array of all spots
 
   let spotsList = [];
