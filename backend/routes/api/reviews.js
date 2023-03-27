@@ -111,10 +111,9 @@ reviewsRouter.post('/:reviewId/images', requireAuth, async (req, res, next) => {
   });
 
   if(!review) {
-    return res.status(404).json({
-      message: "Review couldn't be found",
-      statusCode: 404
-    });
+    const err = new Error("Review couldn't be found")
+    err.status = 404;
+    return next(err);
   };
 
   if(review.userId !== userId) {

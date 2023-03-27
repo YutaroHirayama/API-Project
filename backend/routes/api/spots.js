@@ -9,8 +9,9 @@ const user = require('../../db/models/user');
 const reviewimage = require('../../db/models/reviewimage');
 const { handle } = require('express/lib/router');
 const { validateReview } = require('./reviews.js');
-
+const { query } = require('express-validator/check');
 const spotsRouter = express.Router();
+const { Op } = require('sequelize');
 
 // validate spot
 const validateSpot = [
@@ -48,12 +49,70 @@ const validateSpot = [
   handleValidationErrors
 ];
 
-
+const validateQuery = [
+  query('page')
+    .isInt({ min: 0})
+    .optional()
+    .withMessage('Page must be greater than or equal to 0'),
+  query('size')
+    .isInt({ min: 0})
+    .optional()
+    .withMessage('Size must be greater than or equal to 0'),
+  query('minLat')
+    .isFloat({min: -90, max: 90})
+    .optional()
+    .withMessage('Latitude is not valid'),
+  query('maxLat')
+    .isFloat({min: -90, max: 90})
+    .optional()
+    .withMessage('Latitude is not valid'),
+  query('minLng')
+    .isFloat({min: -180, max: 180})
+    .optional()
+    .withMessage('Minimum latitude is invalid'),
+  query('maxLng')
+    .isFloat({min: -180, max: 180})
+    .optional()
+    .withMessage('Maximum latitude is invalid'),
+  query('minPrice')
+    .isFloat({min: 0})
+    .optional()
+    .withMessage('Minimum price must be greater than or equal to 0'),
+  query('maxPrice')
+    .isFloat({min: 0})
+    .optional()
+    .withMessage('Maximum price must be greater than or equal to 0'),
+  handleValidationErrors
+];
 
 /* GET ALL SPOTS */
-spotsRouter.get('/', async (req, res, next) => {
+spotsRouter.get('/', validateQuery, async (req, res, next) => {
+  let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
 
-  const allSpots = await Spot.findAll({include: [{model: Review}, {model: SpotImage}]}); // Returns array of all spots
+  page = parseInt(page);
+  size = parseInt(size);
+  if(Number.isNaN(page)) page = 0;
+  if(Number.isNaN(size)) size = 20;
+  if(page > 10) page = 10;
+  if(size > 20) size = 20;
+
+  const whereClause = {};
+  if(minLat) whereClause.lat = {[Op.gte]: parseFloat(minLat)};
+  if(maxLat) whereClause.lat = {[Op.lte]: parseFloat(maxLat)};
+  if(minLng) whereClause.lng = {[Op.gte]: parseFloat(minLng)};
+  if(maxLng) whereClause.lng = {[Op.lte]: parseFloat(maxLng)};
+  if(minPrice) whereClause.price = {[Op.gte]: parseFloat(minPrice)};
+  if(maxPrice) whereClause.price = {[Op.lte]: parseFloat(maxPrice)};
+
+  const allSpots = await Spot.findAll({
+    include: [
+      {model: Review},
+      {model: SpotImage}
+    ],
+    where: whereClause,
+    limit: size,
+    offset: size * (page - 1)
+  }); // Returns array of all spots
 
   let spotsList = [];
   allSpots.forEach(spot => spotsList.push(spot.toJSON())); // converting Objects to JSON Object
@@ -81,7 +140,7 @@ spotsRouter.get('/', async (req, res, next) => {
     delete spot.SpotImages;
   })
 
-  res.json({Spots:spotsList});
+  res.json({Spots:spotsList, page, size});
 });
 
 
@@ -163,8 +222,15 @@ spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
 spotsRouter.get('/:spotId/reviews', async (req, res, next) => {
   const spotId = parseInt(req.params.spotId);
 
-  const reviews = await Review.findAll({
-    where: {spotId},
+  const spot = await Spot.findByPk(spotId);
+
+  if(!spot) {
+    const err = new Error("Spot couldn't be found")
+    err.status = 404;
+    return next(err);
+  }
+
+  const reviews = await spot.getReviews({
     include: [
       {model: User, attributes: ['id', 'firstName', 'lastName']},
       {model: ReviewImage, attributes: ['id','url']}
@@ -172,9 +238,7 @@ spotsRouter.get('/:spotId/reviews', async (req, res, next) => {
   });
 
   if(!reviews.length) {
-    const err = new Error("Spot couldn't be found")
-    err.status = 404;
-    return next(err);
+    return res.send('This spot does not have any reviews (yet).')
   }
 
   res.json({Reviews: reviews})
@@ -284,7 +348,7 @@ spotsRouter.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     where: {spotId}
   });
 
-  if(startTime > endTime) {
+  if(startTime >= endTime) {
     const err = new Error("Validation error");
     err.status = 400;
     err.errors = ["endDate cannot be on or before startDate"];

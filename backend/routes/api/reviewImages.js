@@ -24,10 +24,9 @@ reviewImagesRouter.delete('/:imageId', requireAuth, async (req, res, next) => {
   });
 
   if(!image) {
-    return res.status(404).json({
-      message: "Review Image couldn't be found",
-      statusCode: 404
-    });
+    const err = new Error("Review Image couldn't be found")
+    err.status = 404;
+    return next(err);
   };
 
   if(image.Review.userId !== userId) {
