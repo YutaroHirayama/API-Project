@@ -9,7 +9,7 @@ const SpotsIndex = () => {
   const spots = Object.values(
     useSelector((state) => (state.spots.allSpots? state.spots.allSpots : []))
   )
-  console.log('spots:',spots);
+
 
   useEffect(() => {
     dispatch(fetchSpotsThunk())

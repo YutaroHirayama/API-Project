@@ -1,6 +1,6 @@
 
 function SpotIndexItem ({spot}) {
-  console.log('spot: ',spot)
+
   return (
     <li>
       <div className='spotIndexItem-Card'>
@@ -11,8 +11,8 @@ function SpotIndexItem ({spot}) {
           <div className='spotIndexItem-location-stars'>
             <span className='spotIndexItem-location'>{spot.city}, {spot.state}</span>
             <span className='spotIndexItem-stars'>{spot.avgRating? Math.round(spot.avgRating).toFixed(1): 'New'}</span>
-
           </div>
+          <div className='spotIndexItem-'></div>
         </div>
       </div>
     </li>
