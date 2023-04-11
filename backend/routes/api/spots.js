@@ -141,7 +141,7 @@ spotsRouter.get('/', validateQuery, async (req, res, next) => {
       if(image.preview) spot.previewImage = image.url; // sets previewImage to url of SpotImage
     })
 
-    if(!spot.previewImage) spot.previewImage = 'No preview available.'; //if no preview SpotImages available
+    // if(!spot.previewImage) spot.previewImage = 'No preview available.'; //if no preview SpotImages available
 
     // Remove Review and SpotImages attributes on response
     delete spot.Reviews;
@@ -424,9 +424,9 @@ spotsRouter.get('/:spotId', async (req, res, next) => {
   let totalStars = 0;
   spotRes.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
   spotRes.avgStarRating = totalStars / spotRes.Reviews.length; // sets avgRating key in spot object equal to average star rating
-  if(!spotRes.avgStarRating) spotRes.avgStarRating = 'No reviews (yet)'; // if no reviews
+  // if(!spotRes.avgStarRating) spotRes.avgStarRating = 'No reviews (yet)'; // if no reviews
 
-  if(!spotRes.SpotImages.length) spotRes.SpotImages = 'No images available (yet).'; //if no preview SpotImages available
+  // if(!spotRes.SpotImages.length) spotRes.SpotImages = 'No images available (yet).'; //if no preview SpotImages available
 
   delete spotRes.Reviews;
 
