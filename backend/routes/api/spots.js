@@ -134,7 +134,7 @@ spotsRouter.get('/', validateQuery, async (req, res, next) => {
     spot.Reviews.forEach(review => totalStars += review.stars); // Sums all stars per spot
     spot.avgRating = totalStars / reviewCount; // sets avgRating key in spot object equal to average star rating
 
-    if(!spot.avgRating) spot.avgRating = 'No reviews (yet)'; // if no reviews
+    // if(!spot.avgRating) spot.avgRating = 'No reviews (yet)'; // if no reviews
 
     // adding previewImage url
     spot.SpotImages.forEach(image => {
