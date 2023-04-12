@@ -46,7 +46,10 @@ function SpotShow () {
           </div>
         </div>
       </div>
+      <div className='spotDetails-reviewsContainer'>
+
       </div>
+    </div>
 
   );
 };
