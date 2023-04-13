@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createSpotThunk } from '../../store/spots';
+import { createSpotThunk, updateSpotThunk } from '../../store/spots';
 
 function SpotForm({spot, formType}) {
   const history = useHistory();
@@ -15,7 +15,7 @@ function SpotForm({spot, formType}) {
   const [name, setName] = useState(spot?.name);
   const [description, setDescription] = useState(spot?.description);
   const [price, setPrice] = useState(spot?.price);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(spot?.previewImage? spot.previewImage : '');
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
@@ -35,13 +35,15 @@ function SpotForm({spot, formType}) {
       previewUrl
     }
     console.log('component spot' , spot);
+
     if(formType === 'Create') {
       const newSpot = await dispatch(createSpotThunk(spot))
       spot = newSpot
-    }
-    // } else if (formType === 'update') {
 
-    // }
+    } else if (formType === 'Update') {
+      const newSpot = await dispatch(updateSpotThunk(spot))
+      spot = newSpot
+    }
 
     if (spot.errors) {
       setErrors(spot.errors);

@@ -163,9 +163,9 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
     ]
   });
 
-  if(!spots.length) {
-    return res.send('You do not own any spots (yet).')
-  }
+  // if(!spots.length) {
+  //   return res.send('You do not own any spots (yet).')
+  // }
   let spotsList = [];
   spots.forEach(spot => spotsList.push(spot.toJSON()));
 
@@ -176,13 +176,13 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
     spot.Reviews.forEach(review => totalStars += review.stars);
     spot.avgRating = totalStars / reviewCount;
 
-    if(!spot.avgRating) spot.avgRating = 'No reviews (yet)';
+    // if(!spot.avgRating) spot.avgRating = 'No reviews (yet)';
 
     spot.SpotImages.forEach(image => {
       if(image.preview) spot.previewImage = image.url;
     })
 
-    if(!spot.previewImage) spot.previewImage = 'No preview available.';
+    // if(!spot.previewImage) spot.previewImage = 'No preview available.';
 
     delete spot.Reviews;
     delete spot.SpotImages;

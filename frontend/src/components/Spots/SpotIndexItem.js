@@ -1,28 +1,44 @@
-import { Link } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
+import OpenModalButton from '../OpenModalButton';
+import DeleteSpotModal from '../DeleteSpotModal';
 
+function SpotIndexItem ({spot, page}) {
 
-function SpotIndexItem ({spot}) {
+  // const { id } = spot
+  const history = useHistory();
 
+  const updateForm = () => {
+    history.push(`/spots/${spot.id}/edit`)
+  }
 
   return (
-    <li key={spot.id}>
-      <Link to={`spots/${spot.id}`}>
+
         <div className='spotIndexItem-Card'>
-          <div className='spotIndexItem-ImageContainer'>
-            <img className='spotIndexItem-Image' src={spot.previewImage} />
-          </div>
-          <div className='spotIndexItem-DetailsContainer'>
-            <div className='spotIndexItem-header'>
-              <span className='spotIndexItem-location'>{spot.city}, {spot.state}</span>
-              <span className='spotIndexItem-stars'>{spot.avgRating? Math.round(spot.avgRating).toFixed(1): 'New'}</span>
+          <NavLink exact to={`/spots/${spot.id}`}>
+            <div className='spotIndexItem-ImageContainer'>
+              <img className='spotIndexItem-Image' src={spot.previewImage} />
             </div>
+            <div className='spotIndexItem-DetailsContainer'>
+              <div className='spotIndexItem-header'>
+                <span className='spotIndexItem-location'>{spot.city}, {spot.state}</span>
+                <span className='spotIndexItem-stars'>{spot.avgRating? Math.round(spot.avgRating).toFixed(1): 'New'}</span>
+              </div>
+              <div>
+                <span className='spotIndexItem-price'>${spot.price} night</span>
+              </div>
+            </div>
+          </NavLink>
+          {page === 'current' && (
             <div>
-              <span className='spotIndexItem-price'>${spot.price} night</span>
+              <button onClick={updateForm}>Update</button>
+              <OpenModalButton
+              buttonText='Delete'
+              modalComponent={<DeleteSpotModal spotId={spot.id}/>}
+              />
             </div>
-          </div>
+          )}
         </div>
-      </Link>
-    </li>
+
   )
 }
 

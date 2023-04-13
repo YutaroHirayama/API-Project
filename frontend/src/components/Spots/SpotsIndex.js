@@ -13,7 +13,7 @@ function SpotsIndex () {
   useEffect(() => {
     dispatch(fetchSpotsThunk())
   }, [dispatch])
-
+  console.log('spots', spots);
   if(!spots.length) return null;
 
   return (
@@ -21,7 +21,7 @@ function SpotsIndex () {
       <div className='spots'>
         <ul className='spots-grid'>
           {spots.map((spot) => (
-            <SpotIndexItem spot={spot} key={spot.id} />
+            <SpotIndexItem spot={spot} key={spot.id} page='all'/>
           ))}
         </ul>
       </div>

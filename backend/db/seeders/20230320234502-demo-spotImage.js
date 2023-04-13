@@ -25,7 +25,7 @@ module.exports = {
         preview: false
       },
       {
-        spotId: 1,
+        spotId: 3,
         url: 'https://a0.muscache.com/im/pictures/miso/Hosting-759519262986933792/original/d0eff081-99c5-4e35-a4db-7c59cf6ec444.jpeg?im_w=1200',
         preview: true
       },
