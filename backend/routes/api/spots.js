@@ -245,9 +245,9 @@ spotsRouter.get('/:spotId/reviews', async (req, res, next) => {
     ],
   });
 
-  if(!reviews.length) {
-    return res.send('This spot does not have any reviews (yet).')
-  }
+  // if(!reviews.length) {
+  //   return res.send('This spot does not have any reviews (yet).')
+  // }
 
   res.json({Reviews: reviews})
 })
