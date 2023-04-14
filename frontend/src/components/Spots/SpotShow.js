@@ -2,14 +2,15 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpotThunk } from '../../store/spots';
 import { useEffect } from 'react';
+import ReviewsIndex from '../Reviews/ReviewsIndex';
 
 function SpotShow () {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const spot = useSelector(state => state.spots.singleSpot? state.spots.singleSpot : {});
-  const mainImage = useSelector(state => state.spots.singleSpot.SpotImages?.length > 0 ? state.spots.singleSpot.SpotImages[0] : [])
-  const otherImages = useSelector(state => state.spots.singleSpot.SpotImages?.length > 1 ? state.spots.singleSpot.SpotImages.slice(1, 5) : [])
-  const spotOwner = useSelector(state => state.spots.singleSpot.Owner? state.spots.singleSpot.Owner : {})
+  const mainImage = useSelector(state => state.spots.singleSpot?.SpotImages?.length > 0 ? state.spots.singleSpot.SpotImages[0] : [])
+  const otherImages = useSelector(state => state.spots.singleSpot?.SpotImages?.length > 1 ? state.spots.singleSpot.SpotImages.slice(1, 5) : [])
+  const spotOwner = useSelector(state => state.spots.singleSpot?.Owner? state.spots.singleSpot.Owner : {})
 
   useEffect(() => {
     dispatch(fetchSpotThunk(spotId))
@@ -20,7 +21,7 @@ function SpotShow () {
   return (
     <div className='spotDetails'>
       <div className='spotDetails-header'>
-        <p className='spotDetails-title'>{spot.name}</p>
+        <h3 className='spotDetails-title'>{spot.name}</h3>
         <p className='spotDetails-location'>{spot.city}, {spot.state}, {spot.country}</p>
       </div>
       <div className='spotDetails-images'>
@@ -35,7 +36,7 @@ function SpotShow () {
       </div>
       <div className='spotDetails-detailsContainer'>
         <div className='spotDetails-details'>
-          <h4>Hosted by {spotOwner.firstName} {spotOwner.lastName}</h4>
+          <h3>Hosted by {spotOwner.firstName} {spotOwner.lastName}</h3>
           <p className='spotDetails-description'>{spot.description}</p>
         </div>
         <div className='spotDetails-reservationContainer'>
@@ -47,7 +48,7 @@ function SpotShow () {
         </div>
       </div>
       <div className='spotDetails-reviewsContainer'>
-
+        <ReviewsIndex spot={spot} spotId={spotId}/>
       </div>
     </div>
 

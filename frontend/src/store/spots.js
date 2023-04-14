@@ -37,7 +37,7 @@ export const fetchSpotsThunk = () => async (dispatch) => {
   if(response.ok) {
     const spots = await response.json();
 
-    dispatch(loadSpotsAction(spots['Spots']));
+    dispatch(loadSpotsAction(spots.Spots));
   };
 };
 
@@ -58,7 +58,7 @@ export const fetchCurrentSpotsThunk=() => async (dispatch) => {
   if(response.ok) {
     const spots = await response.json();
 
-    dispatch(loadCurrentSpotsAction(spots['Spots']));
+    dispatch(loadCurrentSpotsAction(spots.Spots));
   };
 }
 
@@ -178,24 +178,24 @@ export const updateSpotThunk = (updateSpot) => async (dispatch) => {
 const initialState = {
   allSpots: {}, singleSpot: {}
 }
-const spotsReducer = (state = {}, action) => {
+const spotsReducer = (state = initialState, action) => {
   switch(action.type) {
     case LOAD_SPOTS: {
-      const newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}};
+      const newState = {...state, allSpots: {}, singleSpot: {}};
       action.spots.forEach((spot) => {
-        newState['allSpots'][spot.id] = spot;
+        newState.allSpots[spot.id] = spot;
       })
       return newState;
     };
     case LOAD_SPOT: {
-      const newState = {...state, allSpots: {...state.allSpots}};
-      newState['singleSpot'] = action.spot;
+      const newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}};
+      newState.singleSpot = action.spot;
       return newState;
     };
     case LOAD_CURRENT_SPOTS: {
-      const newState = {...initialState};
+      const newState = {allSpots: {}, singleSpot:{}};
       action.spots.forEach((spot) => {
-        newState['allSpots'][spot.id] = spot;
+        newState.allSpots[spot.id] = spot;
       })
       return newState;
     };
@@ -208,10 +208,10 @@ const spotsReducer = (state = {}, action) => {
       const newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}}
       delete newState.allSpots[action.spotId];
       return newState;
-    }
+    };
     default:
-    return state;
-  }
+      return state;
+  };
 }
 
 export default spotsReducer;

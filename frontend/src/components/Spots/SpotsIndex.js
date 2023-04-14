@@ -8,12 +8,12 @@ function SpotsIndex () {
   const dispatch = useDispatch();
   const spots = Object.values(
     useSelector((state) => (state.spots.allSpots? state.spots.allSpots : []))
-  )
+  );
 
   useEffect(() => {
     dispatch(fetchSpotsThunk())
-  }, [dispatch])
-  console.log('spots', spots);
+  }, [dispatch]);
+
   if(!spots.length) return null;
 
   return (
@@ -21,7 +21,9 @@ function SpotsIndex () {
       <div className='spots'>
         <ul className='spots-grid'>
           {spots.map((spot) => (
-            <SpotIndexItem spot={spot} key={spot.id} page='all'/>
+            <li key={spot.id}>
+              <SpotIndexItem spot={spot} page='all'/>
+            </li>
           ))}
         </ul>
       </div>
