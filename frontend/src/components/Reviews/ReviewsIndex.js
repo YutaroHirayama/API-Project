@@ -8,8 +8,9 @@ import CreateReviewModal from './CreateReviewModal';
 function ReviewsIndex ({spot, spotId}) {
   const dispatch = useDispatch();
   const reviews = Object.values(
-    useSelector((state) => (state.reviews?.spot? state.reviews.spot : []))
-  )
+    useSelector((state) => (state?.reviews?.spot? state.reviews.spot : []))
+  );
+
   const sessionUser = useSelector((state) => state.session.user);
     console.log('sessionUser', sessionUser)
     console.log('reviews', reviews)
@@ -21,22 +22,23 @@ function ReviewsIndex ({spot, spotId}) {
   }
 
   let postReviewButton;
-  if(sessionUser)
+  if(sessionUser) {
     if(sessionUser.id !== spot.ownerId && !(reviews.find(review => review.userId === sessionUser.id))) {
-    postReviewButton = (
-      <OpenModalButton
-      buttonText='Post Your Review'
-      modalComponent={<CreateReviewModal spot={spot} spotId={spotId} userId={sessionUser.id} spotReview={spotReview}/>}
-      />
-    )
+      postReviewButton = (
+        <OpenModalButton
+        buttonText='Post Your Review'
+        modalComponent={<CreateReviewModal spot={spot} spotId={spotId} userId={sessionUser.id} spotReview={spotReview}/>}
+        />
+      )
+    }
   }
+
   useEffect(() => {
     dispatch(fetchReviewsThunk(spotId))
   }, [dispatch]);
 
-  const handlePostReview = (e) => {
+  if(!reviews.length) return null;
 
-  }
   return (
     <div className='reviews-Index'>
       <div className='reviews-header'>
@@ -50,7 +52,7 @@ function ReviewsIndex ({spot, spotId}) {
         <ul className ='reviews-list'>
           {reviews.map((review) => (
             <li key={review.id}>
-              <ReviewIndexItem review={review}/>
+              <ReviewIndexItem review={review} spotId={spotId}/>
             </li>
           ))}
         </ul>

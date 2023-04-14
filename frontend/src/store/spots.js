@@ -1,10 +1,14 @@
 import { csrfFetch } from "./csrf";
 
+/***** SPOTS ACTIONS *****/
+
 export const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 export const LOAD_SPOT = 'spots/LOAD_SPOT';
 export const LOAD_CURRENT_SPOTS = 'spots/LOAD_CURRENT_SPOTS';
 export const CREATE_SPOT = 'spot/CREATE_SPOT';
 export const DELETE_SPOT = 'spot/DELETE_SPOT';
+
+/***** SPOTS ACTION CREATORS *****/
 
 export const loadSpotsAction = (spots) => ({
   type: LOAD_SPOTS,
@@ -30,6 +34,8 @@ export const deleteSpotAction = (spotId) => ({
   type: DELETE_SPOT,
   spotId
 })
+
+/***** SPOTS THUNKS *****/
 
 export const fetchSpotsThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/spots');
@@ -134,8 +140,6 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
   };
 }
 
-
-
 export const updateSpotThunk = (updateSpot) => async (dispatch) => {
   const {
     id,
@@ -174,6 +178,8 @@ export const updateSpotThunk = (updateSpot) => async (dispatch) => {
     return errors
   };
 }
+
+/***** SPOTS REDUCER *****/
 
 const initialState = {
   allSpots: {}, singleSpot: {}

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import * as sessionActions from "../../../store/session";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../../context/Modal";
-import { deleteReviewThunk } from "../../../store/reviews";
+import { deleteReviewThunk, fetchReviewsThunk } from "../../../store/reviews";
 
-function DeleteReviewModal({reviewId}) {
+function DeleteReviewModal({reviewId, spotId}) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
-  const deleteReview = (e) => {
+  const deleteReview = async (e) => {
     e.preventDefault();
     return dispatch(deleteReviewThunk(reviewId))
       .then(closeModal)
   };
 
+  console.log('reviewID', reviewId)
   return (
     <>
       <h1>Confirm Delete</h1>
