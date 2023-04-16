@@ -203,7 +203,7 @@ function SpotForm({spot, formType}) {
             value={previewUrl}
             onChange={(e) => setPreviewUrl(e.target.value)}
             />
-            <div className='errors errors-below'>{errors.url}</div>
+            <div className='errors errors-below'>{errors.previewUrl}</div>
             <input
             type='url'
             className='form-inputs'
