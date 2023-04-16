@@ -17,7 +17,7 @@ const { Op } = require('sequelize');
 const validateSpot = [
   check('address')
     .exists({ checkFalsy: true })
-    .withMessage('Street address is required'),
+    .withMessage('Address is required'),
   check('city')
     .exists({ checkFalsy: true })
     .withMessage('City is required'),
@@ -30,22 +30,31 @@ const validateSpot = [
   check('lat')
     .exists({ checkFalsy: true })
     .isFloat({min: -90, max: 90})
-    .withMessage('Latitude is not valid'),
+    .withMessage('Latitude is required'),
   check('lng')
     .exists({ checkFalsy: true })
     .isFloat({min: -180, max: 180})
-    .withMessage('Longitude is not valid'),
+    .withMessage('Longitude is required'),
   check('name')
     .exists({ checkFalsy: true })
     .isLength({min: 1, max: 50})
-    .withMessage('Name must be less than 50 characters'),
+    .withMessage('Name is required'),
   check('description')
     .exists({ checkFalsy: true })
-    .withMessage('Description is required'),
+    .isLength({min: 30})
+    .withMessage('Description needs a minimum of 30 characters'),
   check('price')
     .exists({ checkFalsy: true })
     .isFloat({min: 0})
-    .withMessage('Price per day is required'),
+    .withMessage('Price is required'),
+  handleValidationErrors
+];
+
+// validate image
+const validateImage = [
+  check('url')
+    .exists({ checkFalsy: true })
+    .withMessage('Preview image is required'),
   handleValidationErrors
 ];
 
@@ -192,7 +201,7 @@ spotsRouter.get('/current', requireAuth, async (req, res, next) => {
 });
 
 /* ADD AN IMAGE TO A SPOT BASED ON THE SPOT'S ID*/
-spotsRouter.post('/:spotId/images', requireAuth, async (req, res, next) => {
+spotsRouter.post('/:spotId/images', validateImage, requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const spotId = parseInt(req.params.spotId);
   const { url, preview } = req.body;

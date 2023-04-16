@@ -15,7 +15,7 @@ function Navigation({ isLoaded }) {
     sessionLinks = (
       <ul>
         <li>
-          <Link to='/spots/new'>Create a new Spot</Link>
+          <Link to='/spots/new'>Create a New Spot</Link>
         </li>
         <li>
           <ProfileButton user={sessionUser} />

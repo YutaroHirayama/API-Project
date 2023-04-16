@@ -8,12 +8,13 @@ import CreateReviewModal from './CreateReviewModal';
 function ReviewsIndex ({spot, spotId}) {
   const dispatch = useDispatch();
   const reviews = Object.values(
-    useSelector((state) => (state?.reviews?.spot? state.reviews.spot : []))
-  );
+    useSelector((state) => (state.reviews?.spot? state.reviews.spot : []))
+  ).sort((a,b) => new Date(a.createdAt).getDate() - new Date(b.createdAt).getTime());
+
 
   const sessionUser = useSelector((state) => state.session.user);
     console.log('sessionUser', sessionUser)
-    console.log('reviews', reviews)
+
 
   const spotReview = {
     spotId,
@@ -27,7 +28,7 @@ function ReviewsIndex ({spot, spotId}) {
       postReviewButton = (
         <OpenModalButton
         buttonText='Post Your Review'
-        modalComponent={<CreateReviewModal spot={spot} spotId={spotId} userId={sessionUser.id} spotReview={spotReview}/>}
+        modalComponent={<CreateReviewModal spot={spot} spotId={spotId} user={sessionUser} spotReview={spotReview}/>}
         />
       )
     }
@@ -37,12 +38,12 @@ function ReviewsIndex ({spot, spotId}) {
     dispatch(fetchReviewsThunk(spotId))
   }, [dispatch]);
 
-  if(!reviews.length) return null;
+  // if(!reviews.length > 0) return null;
 
   return (
     <div className='reviews-Index'>
       <div className='reviews-header'>
-        <h3>{spot.numReviews > 0 ? `${Math.round(spot.avgStarRating).toFixed(1)} - ${spot.numReviews} reviews`: ' New'}</h3>
+        <h3><i className='fa-solid fa-star'/>{spot.numReviews > 0 ? spot.numReviews === 1 ? `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} review`: `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} reviews` :' New'}</h3>
       </div>
       {sessionUser && postReviewButton}
       {sessionUser && postReviewButton && reviews.length === 0 && (

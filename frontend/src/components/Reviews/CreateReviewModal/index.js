@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import * as sessionActions from "../../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
-import { createReviewThunk , fetchReviewsThunk } from "../../../store/reviews";
+import { createReviewThunk } from "../../../store/reviews";
+import { fetchSpotThunk } from "../../../store/spots";
 import ReviewRatingInput from "./ReviewRatingInput";
 import './index.css';
 
 
 
-function CreateReviewModal({spot, spotId, userId, spotReview}) {
+function CreateReviewModal({spot, spotId, user, spotReview}) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
@@ -21,9 +22,11 @@ function CreateReviewModal({spot, spotId, userId, spotReview}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(createReviewThunk({...spotReview, stars, review}))
-      // .then(dispatch(fetchReviewsThunk(spotId)))
-      .then(closeModal)
+    const newReview = await dispatch(createReviewThunk({...spotReview, stars, review, user}))
+      if(newReview) {
+        await dispatch(fetchSpotThunk(spotId), [dispatch])
+          .then (closeModal)
+      }
   };
 
   console.log('spotReview', {...spotReview, stars, review});

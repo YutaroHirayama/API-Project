@@ -36,10 +36,13 @@ export const fetchReviewsThunk = (spotId) => async (dispatch) => {
 
 export const createReviewThunk = (spotReview) => async (dispatch) => {
   const {
+    user,
     spotId,
     review,
     stars
   } = spotReview;
+
+  const { firstName, lastName, id} = user;
 
   const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: 'POST',
@@ -52,7 +55,9 @@ export const createReviewThunk = (spotReview) => async (dispatch) => {
 
   if(response.ok) {
     const review = await response.json();
+    review.User = {firstName, lastName, id}
     dispatch(createReviewAction(review))
+    return review
   }
 }
 
@@ -63,7 +68,8 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
 
   if(response.ok) {
     const review = await response.json();
-    dispatch(deleteReviewAction(review));
+    dispatch(deleteReviewAction(reviewId));
+    return review;
   }
 
 }

@@ -7,3 +7,30 @@
 .spotIndexItem-Image {
   width: 300
 }
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  position: absolute;
+  font-size: 12px;
+  opacity: 0;
+  content: attr(data-tooltip);
+  left: 50%;
+  top: -.25rem;
+  border-radius: 3px;
+  box-shadow: 0 0 3px 2px rgba(100, 100, 100, 0.6);
+  background-color: white;
+  z-index: 10;
+  padding: 5px;
+  text-align: center;
+  width: max-content;
+  transform: translateX(-50%) translateY(-50%);
+  transition: 200ms transform;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transition-duration: 100ms;
+}

@@ -83,28 +83,9 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
 };
 
 export const createSpotThunk = (createSpot) => async (dispatch) => {
-  const {
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-    previewUrl} = createSpot;
 
-    const createImage = {
-      url: previewUrl,
-      preview: true
-    };
-
-  console.log('newSpot: ',createSpot)
-  const response = await csrfFetch('/api/spots', {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
+  try {
+    const {
       address,
       city,
       state,
@@ -113,32 +94,74 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
       lng,
       name,
       description,
-      price
-    })
-  });
+      price,
+      previewUrl,
+      otherImages
+    } = createSpot;
 
-  if(response.ok) {
-    const spot = await response.json();
-    console.log(spot);
+      const createImage = {
+        url: previewUrl,
+        preview: true
+      };
 
-    const imageResponse = await csrfFetch(`/api/spots/${spot.id}/images`, {
+      const imagesArr = []
+        otherImages.forEach(image => {
+          if(image.url.length) imagesArr.push(image.url)
+        })
+
+    const response = await csrfFetch('/api/spots', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(createImage)
-    })
+      body: JSON.stringify({
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price
+      })
+    });
+    console.log('response', response)
 
-    if(imageResponse.ok) {
-      dispatch(createSpotAction(spot))
-      return spot
-    } else {
-      const errors = await imageResponse.json();
-      return errors
+    if(response.ok) {
+
+        console.log('imagesArr', imagesArr)
+        const spot = await response.json();
+
+        const imageResponse = await csrfFetch(`/api/spots/${spot.id}/images`, {
+          method: 'POST',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(createImage)
+        })
+
+        for (let i = 0; i< imagesArr.length; i++) {
+          let imageUrl = imagesArr[i]
+          await csrfFetch(`/api/spots/${spot.id}/images`, {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({url: imageUrl, preview: false})
+          })
+        }
+
+        if(imageResponse.ok) {
+          dispatch(createSpotAction(spot))
+          return spot
+        }
     }
-  } else {
-    const errors = await response.json();
-    return errors
+
+  } catch (e) {
+      const errors = await e.json();
+      errors.errors.previewUrl = 'Preview image is required.'
+      errors.errors.img2Url = 'Image URL must end in .png, .jpg, or .jpeg'
+
+      return errors
   };
-}
+};
+
+
 
 export const updateSpotThunk = (updateSpot) => async (dispatch) => {
   const {

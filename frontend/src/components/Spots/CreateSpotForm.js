@@ -11,12 +11,16 @@ function CreateSpotForm() {
     name: '',
     description: '',
     price: '',
-    previewUrl: ''
+    previewUrl: '',
+    img2Url: '',
+    img3Url: '',
+    img4Url: '',
+    img5Url: ''
   }
 
   return (
     <>
-      <h2>Create a new Spot</h2>
+      <h2>Create a New Spot</h2>
       <SpotForm spot={spot} formType='Create' />
     </>
   )

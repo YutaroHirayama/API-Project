@@ -16,6 +16,10 @@ function SpotShow () {
     dispatch(fetchSpotThunk(spotId))
   }, [dispatch, spotId]);
 
+  const handleClick = () => {
+    alert('Feature coming soon.')
+  }
+
   if(!spot) return null;
 
   return (
@@ -40,10 +44,10 @@ function SpotShow () {
           <p className='spotDetails-description'>{spot.description}</p>
         </div>
         <div className='spotDetails-reservationContainer'>
-          <span className='spotDetails-reservation-price'>${Math.round(spot.price).toFixed(2)} night</span>
-          <span className='spotDetails-reservation-rating'>{spot.numReviews > 0 ? `${Math.round(spot.avgStarRating).toFixed(1)} - ${spot.numReviews} reviews`: ' New'}</span>
+          <span className='spotDetails-reservation-price'>${spot?.price? spot.price.toFixed(2) : 0} night</span>
+          <span className='spotDetails-reservation-rating'><i className='fa-solid fa-star'/>{spot.numReviews > 0 ? spot.numReviews === 1? `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} review`: `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} reviews`: ' New'}</span>
           <div className='spotDetails-reservation-buttonContainer'>
-            <button>Reserve</button>
+            <button onClick={handleClick}>Reserve</button>
           </div>
         </div>
       </div>

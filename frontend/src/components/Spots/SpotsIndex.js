@@ -22,7 +22,7 @@ function SpotsIndex () {
         <ul className='spots-grid'>
           {spots.map((spot) => (
             <li key={spot.id}>
-              <SpotIndexItem spot={spot} page='all'/>
+                <SpotIndexItem spot={spot} page='all'/>
             </li>
           ))}
         </ul>

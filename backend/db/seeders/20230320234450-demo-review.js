@@ -12,19 +12,79 @@ module.exports = {
       {
         spotId: 1,
         userId: 3,
-        review: 'Absolutely breathtaking views, relaxing and overall a fantastic experience. The amenities are perfect for two and the villa is stunning. ',
-        stars: 5,
-      },
-      {
-        spotId: 2,
-        userId: 1,
         review: 'I love this home !!!',
         stars: 4
       },
       {
         spotId: 1,
+        userId: 4,
+        review: 'Beautiful home with great view! Great stay!',
+        stars: 5
+      },
+      {
+        spotId: 1,
         userId: 2,
-        review: 'Beautiful apartment with great view! I would stay here again when visiting Chicago.',
+        review: 'Awesome Place!',
+        stars: 5
+      },
+      {
+        spotId: 2,
+        userId: 3,
+        review: 'I love this home !!!',
+        stars: 4
+      },
+      {
+        spotId: 2,
+        userId: 4,
+        review: 'Beautiful home with great view!',
+        stars: 5
+      },
+      {
+        spotId: 3,
+        userId: 3,
+        review: 'I love this home !!!',
+        stars: 3
+      },
+      {
+        spotId: 3,
+        userId: 4,
+        review: 'Beautiful home with great view!',
+        stars: 5
+      },
+      {
+        spotId: 4,
+        userId: 4,
+        review: 'I love this home !!!',
+        stars: 3
+      },
+      {
+        spotId: 4,
+        userId: 3,
+        review: 'Beautiful home!',
+        stars: 5
+      },
+      {
+        spotId: 5,
+        userId: 1,
+        review: 'I love this home !!!',
+        stars: 4
+      },
+      {
+        spotId: 5,
+        userId: 4,
+        review: 'Beautiful home!',
+        stars: 5
+      },
+      {
+        spotId: 6,
+        userId: 1,
+        review: 'I love this home !!! Perfect place!',
+        stars: 5
+      },
+      {
+        spotId: 6,
+        userId: 4,
+        review: 'Beautiful home!',
         stars: 5
       }
     ], {});

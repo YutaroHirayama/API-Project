@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import * as sessionActions from "../../../store/session";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../../context/Modal";
-import { deleteReviewThunk, fetchReviewsThunk } from "../../../store/reviews";
+import { deleteReviewThunk } from "../../../store/reviews";
+import { fetchSpotThunk } from "../../../store/spots";
 
 function DeleteReviewModal({reviewId, spotId}) {
   const dispatch = useDispatch();
@@ -10,9 +11,12 @@ function DeleteReviewModal({reviewId, spotId}) {
 
   const deleteReview = async (e) => {
     e.preventDefault();
-    return dispatch(deleteReviewThunk(reviewId))
-      .then(closeModal)
-  };
+    const deletedReview = await dispatch(deleteReviewThunk(reviewId))
+      if(deletedReview) {
+        await dispatch(fetchSpotThunk(spotId));
+        await dispatch(closeModal);
+      }
+    };
 
   console.log('reviewID', reviewId)
   return (
