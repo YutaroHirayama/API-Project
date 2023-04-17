@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchSpotsThunk } from "../../store/spots";
 import SpotForm from './SpotForm';
+import './spotform.css';
 
 function UpdateSpotForm() {
   const dispatch = useDispatch();
@@ -18,10 +19,9 @@ function UpdateSpotForm() {
   if(!spot) return null;
 
   return (
-    <>
-      <h2>Update your Spot</h2>
-      <SpotForm spot={spot} formType='Update' />
-    </>
+    <div>
+      <SpotForm spot={spot} formType='Update' formTitle='Update your Spot'/>
+    </div>
   )
 };
 

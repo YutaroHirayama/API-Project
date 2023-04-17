@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviewsThunk } from "../../store/reviews";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ReviewIndexItem from './ReviewsIndexItem';
 import OpenModalButton from '../OpenModalButton';
 import CreateReviewModal from './CreateReviewModal';
+import './reviews.css';
 
 function ReviewsIndex ({spot, spotId}) {
   const dispatch = useDispatch();
@@ -13,7 +14,6 @@ function ReviewsIndex ({spot, spotId}) {
 
 
   const sessionUser = useSelector((state) => state.session.user);
-    console.log('sessionUser', sessionUser)
 
 
   const spotReview = {
@@ -28,7 +28,7 @@ function ReviewsIndex ({spot, spotId}) {
       postReviewButton = (
         <OpenModalButton
         buttonText='Post Your Review'
-        modalComponent={<CreateReviewModal spot={spot} spotId={spotId} user={sessionUser} spotReview={spotReview}/>}
+        modalComponent={<CreateReviewModal className='review-modal' spot={spot} spotId={spotId} user={sessionUser} spotReview={spotReview}/>}
         />
       )
     }
@@ -36,14 +36,14 @@ function ReviewsIndex ({spot, spotId}) {
 
   useEffect(() => {
     dispatch(fetchReviewsThunk(spotId))
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   // if(!reviews.length > 0) return null;
 
   return (
     <div className='reviews-Index'>
       <div className='reviews-header'>
-        <h3><i className='fa-solid fa-star'/>{spot.numReviews > 0 ? spot.numReviews === 1 ? `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} review`: `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} reviews` :' New'}</h3>
+        <h3><i className='fa-solid fa-star'/> {spot.numReviews > 0 ? spot.numReviews === 1 ? `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} review`: `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} reviews` :' New'}</h3>
       </div>
       {sessionUser && postReviewButton}
       {sessionUser && postReviewButton && reviews.length === 0 && (
@@ -52,7 +52,7 @@ function ReviewsIndex ({spot, spotId}) {
       <div className='reviewsContainer'>
         <ul className ='reviews-list'>
           {reviews.map((review) => (
-            <li key={review.id}>
+            <li className='review-index-item' key={review.id}>
               <ReviewIndexItem review={review} spotId={spotId}/>
             </li>
           ))}

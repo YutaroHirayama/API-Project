@@ -1,5 +1,5 @@
 import SpotForm from './SpotForm';
-
+import './spotform.css';
 function CreateSpotForm() {
   const spot = {
     address: '',
@@ -11,7 +11,7 @@ function CreateSpotForm() {
     name: '',
     description: '',
     price: '',
-    previewUrl: '',
+    previewImage: '',
     img2Url: '',
     img3Url: '',
     img4Url: '',
@@ -19,10 +19,9 @@ function CreateSpotForm() {
   }
 
   return (
-    <>
-      <h2>Create a New Spot</h2>
-      <SpotForm spot={spot} formType='Create' />
-    </>
+    <div>
+      <SpotForm spot={spot} formType='Create' formTitle='Create a New Spot'/>
+    </div>
   )
 };
 

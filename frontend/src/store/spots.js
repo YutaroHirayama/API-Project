@@ -49,7 +49,6 @@ export const fetchSpotsThunk = () => async (dispatch) => {
 
 export const fetchSpotThunk = (spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}`);
-  console.log('response:',response);
 
   if(response.ok) {
     const spot = await response.json();
@@ -76,7 +75,6 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
 
   if(response.ok) {
     const spot = await response.json();
-    console.log('action spotId', spotId);
     dispatch(deleteSpotAction(spotId));
     return spot
   };
@@ -95,12 +93,12 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
       name,
       description,
       price,
-      previewUrl,
+      previewImage,
       otherImages
     } = createSpot;
 
       const createImage = {
-        url: previewUrl,
+        url: previewImage,
         preview: true
       };
 
@@ -124,11 +122,9 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
         price
       })
     });
-    console.log('response', response)
 
     if(response.ok) {
 
-        console.log('imagesArr', imagesArr)
         const spot = await response.json();
 
         const imageResponse = await csrfFetch(`/api/spots/${spot.id}/images`, {
@@ -145,7 +141,6 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
             body: JSON.stringify({url: imageUrl, preview: false})
           })
         }
-
         if(imageResponse.ok) {
           dispatch(createSpotAction(spot))
           return spot
@@ -154,9 +149,6 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
 
   } catch (e) {
       const errors = await e.json();
-      errors.errors.previewUrl = 'Preview image is required.'
-      errors.errors.img2Url = 'Image URL must end in .png, .jpg, or .jpeg'
-
       return errors
   };
 };

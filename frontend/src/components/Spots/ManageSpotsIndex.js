@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentSpotsThunk } from "../../store/spots";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import SpotIndexItem from './SpotIndexItem.js';
 import './spots.css';
@@ -11,13 +11,11 @@ function ManageSpots () {
   const spots = Object.values(
     useSelector((state) => (state.spots.allSpots? state.spots.allSpots : []))
   )
-  const [spotsNum, setSpotsNum] = useState(0);
 
 
   useEffect(() => {
     dispatch(fetchCurrentSpotsThunk())
   }, [dispatch])
-  console.log('spots', spots);
 
   const handleClick = () => {
     history.push('/spots/new');
@@ -25,10 +23,10 @@ function ManageSpots () {
 
 return (
 
-    <div className='index'>
+    <div className='manage-spots-index'>
       <div className='spots'>
-        <h2>Manage Spots</h2>
-        {spots.length < 1 && (<button onClick={handleClick}>Create a New Spot</button>)}
+        <h2 className='manage-spots-header'>Manage Spots</h2>
+        {spots.length < 1 && (<button id='manage-spot-create-button' onClick={handleClick}>Create a New Spot</button>)}
         <ul className='spots-grid'>
           {spots.map((spot) => (
             <li key={spot.id}>

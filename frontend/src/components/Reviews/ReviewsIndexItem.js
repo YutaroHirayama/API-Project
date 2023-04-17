@@ -1,10 +1,8 @@
-import { NavLink, useHistory } from 'react-router-dom'
 import OpenModalButton from '../OpenModalButton';
 import DeleteReviewModal from './DeleteReviewModal';
 import { useSelector } from 'react-redux';
 
 function ReviewIndexItem ({review, spotId}) {
-  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
 
   const date = review.createdAt.substring(0, review.createdAt.indexOf('T')).split('-')
@@ -15,17 +13,18 @@ function ReviewIndexItem ({review, spotId}) {
   if(sessionUser) {
     if(sessionUser.id === review.userId) {
       deleteReviewButton = (
-        <OpenModalButton
-        buttonText='Delete'
-        modalComponent={<DeleteReviewModal reviewId={review.id} spotId={spotId}/>}
-        />
+          <OpenModalButton
+          className='modal-dialog'
+          buttonText='Delete'
+          modalComponent={<DeleteReviewModal className='delete-modal' reviewId={review.id} spotId={spotId}/>}
+          />
       )
     }
   }
 
   return (
     <div className='reviewIndexItemContainer'>
-      <h4>{review.User.firstName}</h4>
+      <div className='reviewIndexItem-name'>{review.User.firstName}</div>
       <div className='reviewIndexItem-date'>{month} {year}</div>
       <div className='reviewIndexItem-text'>
         {review.review}

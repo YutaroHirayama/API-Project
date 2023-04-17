@@ -34,7 +34,7 @@ function LoginFormModal() {
   };
 
   return (
-    <div className='modal-container'>
+    <div className='login-modal'>
       <h1>Log In</h1>
       {errors.credential && (
           <p className='errors'>{errors.credential}</p>

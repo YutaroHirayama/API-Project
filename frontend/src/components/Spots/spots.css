@@ -84,3 +84,24 @@
   opacity: 1;
   transition-duration: 100ms;
 }
+
+.modal-button {
+  padding: 5px 10px;
+  margin: 10px 5px;
+  color: white;
+  background-color: rgb(83, 81, 81);
+  box-shadow: 2px 2px black;
+  border: 1px black;
+}
+
+.manage-spots-index {
+  padding: 0px 30px;
+}
+
+#manage-spot-create-button {
+  padding: 5px 10px;
+  color: white;
+  background-color: rgb(83, 81, 81);
+  box-shadow: 2px 2px black;
+  border: 1px black;
+}
