@@ -111,6 +111,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+<<<<<<< HEAD
     await queryInterface.dropTable('Spots');
+=======
+    await queryInterface.bulkDelete('Spots', null, {})
+>>>>>>> dev
   }
 };

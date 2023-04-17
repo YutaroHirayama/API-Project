@@ -91,6 +91,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+<<<<<<< HEAD
     await queryInterface.dropTable('Reviews');
+=======
+    await queryInterface.bulkDelete('Reviews', null, {})
+>>>>>>> dev
   }
 };

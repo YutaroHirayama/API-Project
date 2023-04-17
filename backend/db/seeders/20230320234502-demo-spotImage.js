@@ -225,6 +225,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+<<<<<<< HEAD
     await queryInterface.dropTable('SpotImages');
+=======
+    await queryInterface.bulkDelete('SpotImages', null, {})
+>>>>>>> dev
   }
 };
