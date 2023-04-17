@@ -46,7 +46,7 @@ function SpotShow () {
         </div>
         <div className='spotDetails-reservationContainer'>
           <div className='reservation-price-stars'>
-            <span className='spotDetails-reservation-price'>${spot?.price? spot.price.toFixed(2) : 0} night</span>
+            <span className='spotDetails-reservation-price'>${spot?.price? parseInt(spot.price).toFixed(2) : 0} night</span>
             <span className='spotDetails-reservation-rating'><i className='fa-solid fa-star'/>{spot.numReviews > 0 ? spot.numReviews === 1? `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} review`: `${spot.avgStarRating.toFixed(2)} · ${spot.numReviews} reviews`: ' New'}</span>
           </div>
           <div className='spotDetails-reservation-buttonContainer'>
