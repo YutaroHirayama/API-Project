@@ -3,10 +3,17 @@
   color: red;
 }
 
+#modal-content {
+  border-radius: 20px;
+  z-index: 3
+}
 .demo-user {
   display: flex;
   justify-content: center;
+  text-decoration: underline;
   padding-top: 20px;
+  color: rgb(0, 84, 63);
+  font-weight: bold;
 }
 
 h1 {
@@ -22,8 +29,8 @@ form {
 
 .enabled {
   color: white;
-  background-color: red;
-  box-shadow: 5px 5px 1px black;
+  background-color: #ff385c;
+  box-shadow: 5px 5px black;
 }
 label {
   display: flex;

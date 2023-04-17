@@ -61,8 +61,8 @@ function LoginFormModal() {
 
         <button disabled={credential.length < 4 || password.length < 6} className={(credential.length < 4 || password.length < 6) ? 'disabled login-button' : 'enabled login-button'} type="submit">Log In</button>
 
-        <Link >
-          <div className='demo-user' onClick={demoUser}>Demo User</div>
+        <Link className='demo-user'>
+          <a className='demo-user' onClick={demoUser}>Demo User</a>
         </Link>
       </form>
     </div>

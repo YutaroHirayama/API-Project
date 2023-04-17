@@ -23,6 +23,15 @@ const validateSignup = [
     .not()
     .isEmail()
     .withMessage('Username cannot be an email.'),
+  check('username')
+    .custom(async value => {
+      const existingUser = await User.findOne({
+        where: {username: value}
+      })
+      if(existingUser) {
+        throw new Error('Username must be unique')
+      }
+    }),
   check('password')
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
