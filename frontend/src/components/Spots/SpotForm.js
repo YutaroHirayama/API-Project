@@ -53,10 +53,6 @@ function SpotForm({spot, formType, formTitle}) {
     if(name.length < 1) resErrors.name = 'Name is required';
     if(!price || price <= 0) resErrors.price = 'Price is required';
     if(previewImage.length < 1) resErrors.previewImage = 'Preview image is required';
-    if(img2Url.length > 0 && (img2Url.slice(-4) !== '.jpg' || img2Url.slice(-4) !== '.png' || img2Url.slice(-5) !=='.jpeg')) resErrors.img2Url = 'Image URL must end in .png, .jpg, or .jpeg'
-    if(img3Url.length > 0 && (img3Url.slice(-4) !== '.jpg' || img3Url.slice(-4) !== '.png' || img3Url.slice(-5) !=='.jpeg')) resErrors.img3Url = 'Image URL must end in .png, .jpg, or .jpeg'
-    if(img4Url.length > 0 && (img4Url.slice(-4) !== '.jpg' || img4Url.slice(-4) !== '.png' || img4Url.slice(-5) !=='.jpeg')) resErrors.img4Url = 'Image URL must end in .png, .jpg, or .jpeg'
-    if(img5Url.length > 0 && (img5Url.slice(-4) !== '.jpg' || img5Url.slice(-4) !== '.png' || img5Url.slice(-5) !=='.jpeg')) resErrors.img5Url = 'Image URL must end in .png, .jpg, or .jpeg'
 
     if (Object.values(resErrors).length > 0) {
       setErrors(resErrors);
