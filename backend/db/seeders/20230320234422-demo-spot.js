@@ -23,27 +23,87 @@ module.exports = {
       price: 521.00
     },
     {
-      ownerId: 2,
-      address: '809 N Kilkea Dr',
-      city: 'West Hollywood',
+      ownerId: 1,
+      address: '1 Palm Springs Dr',
+      city: 'Palm Springs',
       state: 'California',
       country: 'United States',
-      lat: 34.08576,
-      lng: -118.36725,
-      name: 'Beverly Crescent',
-      description: 'A glass wall slides away to open the living room to a backyard designed for entertaining at this architect-crafted L.A. home. Its light-saturated living areas—indoors and out—are the work of Eran Gispan of NE Designs, and the attention to detail is evident in elements from a hidden balcony to built-in cupboards. It’s 1.6 miles to shopping and movies at The Grove, and 11.5 miles to the beach. A walled- and hedged-in courtyard surrounds the villa’s private pool and hot tub, and a row of loungers waits on the sunny patio. Pull the outdoor chairs around the firepit and alfresco TV, or gather for the evening in the home theater.',
-      price: 2350.00
-    },{
-      ownerId: 3,
-      address: '442 N Halsted St',
-      city: 'Chicago',
-      state: 'Illinois',
+      lat: 33.81326,
+      lng: -116.50009,
+      name: 'The Butterfly House',
+      description: 'Salt water POOL & JACUZZI. Huge FIRE PIT with custom seating. ALKALINE drinking water & SOFT water for bathing. Separate CABANA with bed, AC & full bath. Artfully designed landscaping in front & back with GRILL and BOCCE COURT. BRAND NEW BATHROOMS & APPLIANCES',
+      price: 952.75
+    },
+    {
+      ownerId: 1,
+      address: '2 Palm Springs Dr',
+      city: 'Palm Springs',
+      state: 'California',
       country: 'United States',
-      lat: 41.89031,
-      lng: -87.64774,
-      name: 'Cloud9',
-      description: 'Breathtaking skyline views, upscale kitchen finishes, and designer touches , just a mile away from the lively West Loop neighborhood. Explore the gourmet-style dining, bars, and cafes, or visit Randolph Street Market to get some vintage artwork.',
-      price: 655.00
+      lat: 33.81326,
+      lng: -116.50009,
+      name: 'PS PLAYGROUND',
+      description: 'Treat yourself and escape to this Private Paradise in true Palm Springs Style.  Located on a gated ½ acre, and walled-off with Ficus trees for complete privacy, this estate is designed for romance, beauty & fun.  Float in the Saltwater Pool & Spa, relax on the Tanning Shelf, or gaze at the unobstructed San Jacinto Mtn.',
+      price: 850.00
+    },
+    {
+      ownerId: 2,
+      address: '1 San Diego Street',
+      city: 'San Diego',
+      state: 'California',
+      country: 'United States',
+      lat: 32.86829,
+      lng: -117.15637,
+      name: 'Savor Panoramic Harbor',
+      description: 'The views in our house are absolutely spectacular! The location is central to great restaurants, downtown SD, SeaWorld, and bay beaches where you can kayak or paddle board. It is a ideal choice for vacations and for business travelers looking for a comfortable place to call home while traveling.',
+      price: 405.00
+    },{
+      ownerId: 2,
+      address: '2 San Diego Street',
+      city: 'San Diego',
+      state: 'California',
+      country: 'United States',
+      lat: 32.86829,
+      lng: -117.15637,
+      name: 'Beachfront House',
+      description: 'Our 4 bedroom and 2 bathroom house is on the beach with incredible ocean views including the Imperial Beach Pier. The open floor plan maximizes the views from the kitchen, living area and dining area. If youre looking for an awesome beach vacation, you found it!',
+      price: 508.00
+    },
+    {
+      ownerId: 3,
+      address: '3 San Diego Street',
+      city: 'San Diego',
+      state: 'California',
+      country: 'United States',
+      lat: 32.86829,
+      lng: -117.15637,
+      name: 'Surf & Sand',
+      description: 'This 3 bedroom home in South Mission Beach is just one house off the boardwalk and beach with a rooftop deck with lounges, a BBQ, outdoor dining, and panoramic views of the coast.',
+      price: 354.00
+    },
+    {
+      ownerId: 4,
+      address: '1 Santa Barbara Boulevard',
+      city: 'Santa Barbara',
+      state: 'California',
+      country: 'United States',
+      lat: 34.42078,
+      lng: -119.69975,
+      name: 'Hollywood Beach Front',
+      description: 'Stunning Hollywood Beach Ocean Front Home. This striking beauty is on a with 43 feet of beach sand frontage, a roof top deck. This astounding beach property has 6 large bedrooms, 5 with their own private bathrooms, 6 Full baths in total and a powder room.',
+      price: 1125.00
+    },
+    {
+      ownerId: 4,
+      address: '2 Santa Barbara Boulevard',
+      city: 'Santa Barbara',
+      state: 'California',
+      country: 'United States',
+      lat: 34.42078,
+      lng: -119.69975,
+      name: 'Ocean Oasis',
+      description: 'Welcome to the "Slot Machine House" in the charming Hollywood Beach community nestled halfway between Malibu and Santa Barbara. This is a one-of-a-kind luxury home is on Ocean Drive directly across from the beach. The home was designed by an architect in the Frank Lloyd School of Design and the goal was to make a house look like an object..the "Slot Machine House" was created! It has been "meticulously" updated in California Coastal style with modern amenities.',
+      price: 541.00
     }
     ], {});
   },

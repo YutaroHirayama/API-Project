@@ -1,21 +1,22 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
-
+import logo from '../../images/A-logo.png'
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
+      <div className='sessionLinks'>
+          <Link to='/spots/new' className='header-create-new-spot links'>Create a New Spot</Link>
+          <ProfileButton user={sessionUser} />
+      </div>
     );
   } else {
     sessionLinks = (
@@ -33,14 +34,17 @@ function Navigation({ isLoaded }) {
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">
-          Home
+    <div className='navigation-header'>
+        <NavLink className='Home-icon' exact to="/">
+          <div className='nagivation-logo-title'>
+            <img className='logo' src={logo}/>
+            <div>
+              <a className='header-title links'>airbnb2</a>
+            </div>
+          </div>
         </NavLink>
-      </li>
       {isLoaded && sessionLinks}
-    </ul>
+    </div>
   );
 }
 
