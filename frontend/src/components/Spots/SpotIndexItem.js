@@ -16,7 +16,7 @@ function SpotIndexItem ({spot, page}) {
 
         <div className='spotIndexItem-Card'>
           <span data-tooltip={`${spot.name}`}>
-            <NavLink exact to={`/spots/${spot.id}`}>
+            <NavLink className='links' exact to={`/spots/${spot.id}`}>
               <div className='spotIndexItem-ImageContainer'>
                 <img className='spotIndexItem-Image' src={spot.previewImage} />
               </div>
@@ -26,7 +26,8 @@ function SpotIndexItem ({spot, page}) {
                   <span className='spotIndexItem-stars'><i className='fa-solid fa-star'/>{spot.avgRating? spot.avgRating.toFixed(2) : 'New'}</span>
                 </div>
                 <div>
-                  <span className='spotIndexItem-price'>${spot.price} night</span>
+                  <span className='spotIndexItem-price links'>${spot.price.toFixed(2)}</span>
+                  <span> night</span>
                 </div>
               </div>
             </NavLink>

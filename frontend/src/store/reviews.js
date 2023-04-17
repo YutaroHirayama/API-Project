@@ -35,29 +35,36 @@ export const fetchReviewsThunk = (spotId) => async (dispatch) => {
 };
 
 export const createReviewThunk = (spotReview) => async (dispatch) => {
-  const {
-    user,
-    spotId,
-    review,
-    stars
-  } = spotReview;
 
-  const { firstName, lastName, id} = user;
-
-  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
+  try {
+    const {
+      user,
+      spotId,
       review,
       stars
-    })
-  });
+    } = spotReview;
 
-  if(response.ok) {
-    const review = await response.json();
-    review.User = {firstName, lastName, id}
-    dispatch(createReviewAction(review))
-    return review
+    const { firstName, lastName, id} = user;
+
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        review,
+        stars
+      })
+    });
+
+    if(response.ok) {
+      const review = await response.json();
+      review.User = {firstName, lastName, id}
+      dispatch(createReviewAction(review))
+      return review
+    }
+
+  } catch (e) {
+    const errors = await e.json();
+    return errors
   }
 }
 

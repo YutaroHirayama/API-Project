@@ -28,6 +28,7 @@ const ReviewRatingInput = ({ stars, disabled, onChange}) => {
   return (
     <div className="reviewRating-input">
       {[1, 2, 3, 4, 5].map((number) => starsIcon(number))}
+      <span> Stars </span>
     </div>
   );
 };
