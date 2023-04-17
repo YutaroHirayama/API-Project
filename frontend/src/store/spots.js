@@ -93,12 +93,12 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
       name,
       description,
       price,
-      previewUrl,
+      previewImage,
       otherImages
     } = createSpot;
 
       const createImage = {
-        url: previewUrl,
+        url: previewImage,
         preview: true
       };
 
@@ -141,7 +141,6 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
             body: JSON.stringify({url: imageUrl, preview: false})
           })
         }
-
         if(imageResponse.ok) {
           dispatch(createSpotAction(spot))
           return spot
@@ -150,9 +149,6 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
 
   } catch (e) {
       const errors = await e.json();
-      errors.errors.previewUrl = 'Preview image is required.'
-      errors.errors.img2Url = 'Image URL must end in .png, .jpg, or .jpeg'
-
       return errors
   };
 };

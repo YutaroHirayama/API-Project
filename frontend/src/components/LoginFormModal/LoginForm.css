@@ -3,10 +3,6 @@
   color: red;
 }
 
-#modal-content {
-  border-radius: 20px;
-  z-index: 3
-}
 .demo-user {
   display: flex;
   justify-content: center;

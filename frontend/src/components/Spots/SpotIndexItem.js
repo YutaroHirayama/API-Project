@@ -18,7 +18,7 @@ function SpotIndexItem ({spot, page}) {
           <span data-tooltip={`${spot.name}`}>
             <NavLink className='links' exact to={`/spots/${spot.id}`}>
               <div className='spotIndexItem-ImageContainer'>
-                <img className='spotIndexItem-Image' src={spot.previewImage} />
+                <img alt='spot-preview' className='spotIndexItem-Image' src={spot.previewImage} />
               </div>
               <div className='spotIndexItem-DetailsContainer'>
                 <div className='spotIndexItem-header'>
@@ -26,14 +26,14 @@ function SpotIndexItem ({spot, page}) {
                   <span className='spotIndexItem-stars'><i className='fa-solid fa-star'/>{spot.avgRating? spot.avgRating.toFixed(2) : 'New'}</span>
                 </div>
                 <div>
-                  <span className='spotIndexItem-price links'>${spot.price.toFixed(2)}</span>
+                  <span className='spotIndexItem-price links'>${spot?.price? parseInt(spot.price).toFixed(2) : ''}</span>
                   <span> night</span>
                 </div>
               </div>
             </NavLink>
             {page === 'current' && (
               <div>
-                <button onClick={updateForm}>Update</button>
+                <button className='modal-button' onClick={updateForm}>Update</button>
                 <OpenModalButton
                 buttonText='Delete'
                 modalComponent={<DeleteSpotModal spotId={spot.id}/>}

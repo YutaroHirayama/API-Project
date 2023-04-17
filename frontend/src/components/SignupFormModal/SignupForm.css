@@ -6,7 +6,8 @@
 
 #modal-content {
   border-radius: 20px;
-  z-index: 11!important
+  z-index: 1!important;
+  border: 3px solid black;
 }
 
 
