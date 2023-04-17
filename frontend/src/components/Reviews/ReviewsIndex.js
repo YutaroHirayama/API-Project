@@ -13,7 +13,6 @@ function ReviewsIndex ({spot, spotId}) {
 
 
   const sessionUser = useSelector((state) => state.session.user);
-    console.log('sessionUser', sessionUser)
 
 
   const spotReview = {

@@ -18,7 +18,6 @@ function DeleteReviewModal({reviewId, spotId}) {
       }
     };
 
-  console.log('reviewID', reviewId)
   return (
     <>
       <h1>Confirm Delete</h1>

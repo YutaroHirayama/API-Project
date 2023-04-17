@@ -42,12 +42,10 @@ function SpotForm({spot, formType}) {
       previewUrl,
       otherImages
     }
-    console.log('component spot' , spot);
 
     if(formType === 'Create') {
       const newSpot = await dispatch(createSpotThunk(spot))
       spot = newSpot
-      console.log('newSpot', newSpot)
 
     } else if (formType === 'Update') {
       const newSpot = await dispatch(updateSpotThunk(spot))
@@ -60,7 +58,7 @@ function SpotForm({spot, formType}) {
       history.push(`/spots/${spot.id}`);
     }
   };
-  console.log('spot', spot)
+
 
   return (
     <form className='spot-form' onSubmit={handleSubmit}>

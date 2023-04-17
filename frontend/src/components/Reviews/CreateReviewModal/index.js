@@ -29,7 +29,7 @@ function CreateReviewModal({spot, spotId, user, spotReview}) {
     const newReview = await dispatch(createReviewThunk({...spotReview, stars, review, user}))
       if(newReview) {
       if(newReview.errors) {
-        console.log('newReview', newReview)
+
         setErrors(newReview.errors);
       } else {
         await dispatch(fetchSpotThunk(spotId), [dispatch])
@@ -38,8 +38,6 @@ function CreateReviewModal({spot, spotId, user, spotReview}) {
     }
   };
 
-
-  console.log('spotReview', {...spotReview, stars, review});
   return (
     <div className='reviewContainer'>
       <h2>How was your stay?</h2>

@@ -49,7 +49,6 @@ export const fetchSpotsThunk = () => async (dispatch) => {
 
 export const fetchSpotThunk = (spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}`);
-  console.log('response:',response);
 
   if(response.ok) {
     const spot = await response.json();
@@ -76,7 +75,6 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
 
   if(response.ok) {
     const spot = await response.json();
-    console.log('action spotId', spotId);
     dispatch(deleteSpotAction(spotId));
     return spot
   };
@@ -124,11 +122,9 @@ export const createSpotThunk = (createSpot) => async (dispatch) => {
         price
       })
     });
-    console.log('response', response)
 
     if(response.ok) {
 
-        console.log('imagesArr', imagesArr)
         const spot = await response.json();
 
         const imageResponse = await csrfFetch(`/api/spots/${spot.id}/images`, {

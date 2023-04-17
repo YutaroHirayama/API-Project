@@ -17,7 +17,7 @@ function ManageSpots () {
   useEffect(() => {
     dispatch(fetchCurrentSpotsThunk())
   }, [dispatch])
-  console.log('spots', spots);
+
 
   const handleClick = () => {
     history.push('/spots/new');
