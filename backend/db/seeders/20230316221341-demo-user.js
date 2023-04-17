@@ -49,6 +49,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {})
+    options.tableName = 'Users';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      username: { [Op.in]: ['Demo-lition', 'TestUser1', 'TestUser2', 'TestUser3', 'TestUser4'] }
+    }, {});
   }
 };

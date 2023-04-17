@@ -91,10 +91,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-<<<<<<< HEAD
-    await queryInterface.dropTable('Reviews');
-=======
-    await queryInterface.bulkDelete('Reviews', null, {})
->>>>>>> dev
+    options.tableName = 'Reviews';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      spotId: { [Op.in]: [1, 2, 3, 4, 5, 6] }
+    }, {});
   }
 };

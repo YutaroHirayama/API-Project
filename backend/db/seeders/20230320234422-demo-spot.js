@@ -1,7 +1,5 @@
 'use strict';
 
-const { query } = require("express");
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -111,10 +109,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-<<<<<<< HEAD
-    await queryInterface.dropTable('Spots');
-=======
-    await queryInterface.bulkDelete('Spots', null, {})
->>>>>>> dev
+    options.tableName = 'Spots';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      ownerId: { [Op.in]: [1,2,3,4] }
+    }, {});
   }
 };

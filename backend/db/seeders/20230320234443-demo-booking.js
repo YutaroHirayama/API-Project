@@ -31,10 +31,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-<<<<<<< HEAD
-    await queryInterface.dropTable('Bookings');
-=======
-    await queryInterface.bulkDelete('Bookings', null, {})
->>>>>>> dev
+    options.tableName = 'Bookings';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      spotId: { [Op.in]: [1, 2, 3] }
+    }, {});
   }
 };

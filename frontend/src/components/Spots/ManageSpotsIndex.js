@@ -15,11 +15,7 @@ function ManageSpots () {
 
   useEffect(() => {
     dispatch(fetchCurrentSpotsThunk())
-  }, [dispatch])
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
+  }, [dispatch]);
 
   const handleClick = () => {
     history.push('/spots/new');
