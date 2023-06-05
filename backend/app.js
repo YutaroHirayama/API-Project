@@ -42,12 +42,6 @@ app.use(
 );
 
 
-
-
-
-
-
-
 app.use(routes);
 
 // Catch unhandled requests and forward to error handler.
