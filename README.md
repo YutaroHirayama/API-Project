@@ -1,6 +1,6 @@
 # Carebnb
 
-Carebnb is an Airbnb clone web application. Airbnb2 provides users the ability to post locations to host and leave reviews on spots they have visited.
+Carebnb is an Airbnb clone web application. Carebnb provides users the ability to post locations to host and leave reviews on spots they have visited.
 
 Check out [Carebnb](https://carebnb-e1wd.onrender.com) here.
 
