@@ -22,7 +22,7 @@ function Navigation({ isLoaded }){
           <div className='nagivation-logo-title'>
             <img alt='logo' className='logo' src={logo}/>
               <div>
-                <a className='header-title links'>airbnb2</a>
+                <a className='header-title links'>Carebnb</a>
               </div>
           </div>
         </NavLink>
