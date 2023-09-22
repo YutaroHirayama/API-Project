@@ -35,7 +35,6 @@ function App() {
         <Route exact path='/spots/:spotId'>
           <SpotShow />
         </Route>
-
         </Switch>}
     </>
   );
